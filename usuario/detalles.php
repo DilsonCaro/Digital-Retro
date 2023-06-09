@@ -1,58 +1,110 @@
 <?php
-// Verificar si se ha proporcionado el ID del producto en la URL
-if (isset($_REQUEST['id_producto'])) {
-  $id_producto = $_GET['id_producto'];
+require 'servicios/config.php';
+require 'servicios/conexion.php';
 
-  // Aquí puedes realizar las operaciones necesarias utilizando el ID del producto
-  // ...
+$db = new Database();
+$con = $db->conectar();
 
-  // Ejemplo de salida
-  echo "ID del producto: " . $id_producto;
+$id = isset($_GET['id']) ? $_GET['id'] : '';
+$token = isset($_GET['token']) ? $_GET['token'] : '';
+
+if ($id == '' || $token == '') {
+  echo 'Error al procesar la petición';
+  exit;
 } else {
-  echo "No se ha proporcionado el ID del producto.";
+  $token_tmp = hash_hmac('sha1', $id, KEY_TOKEN);
+  if ($token == $token_tmp) {
+
+    $sql = $con->prepare("SELECT count(id_productos) FROM productos WHERE id_productos=? AND estado=1");
+    $sql->execute([$id]);
+    if ($sql->fetchColumn() > 0) {
+      $sql = $con->prepare("SELECT nombre_videojuego, descripcion, precio, plataforma, clasificacion, imagen FROM productos WHERE id_productos=? AND estado=1 
+      LIMIT 1");
+      $sql->execute([$id]);
+      $row = $sql->fetch(PDO::FETCH_ASSOC);
+      $nombre = $row['nombre_videojuego'];
+      $descripcion = $row['descripcion'];
+      $precio = $row['precio'];
+      $plataforma = $row['plataforma'];
+      $clasificacion = $row['clasificacion'];
+      $imagen = $row['imagen'];
+    }
+  } else {
+    echo 'Error al procesar la petición';
+    exit;
+  }
 }
+
 ?>
 
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
 
 <head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Digital Retro Detalle</title>
-  <script type="text/javascript" src="js/jquery-3.4.1.min.js"></script>
-  <link href="https://fonts.googleapis.com/css?family=Sen&display=swap" rel="stylesheet">
-  <link rel="stylesheet" type="text/css" href="font-awesome-4.7.0/css/font-awesome.min.css">
-  <link rel="stylesheet" type="text/css" href="css/index.css">
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Digital Retro</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet"
+    integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
+  <link rel="stylesheet" href="css/index.css">
 </head>
 
 <body>
   <header>
-    <div class="logo-place"><img src="https://images.cooltext.com/5660233.png"></div>
-    <!-- <div class="nombre">Digital Retro</div> -->
-    <div class="search-place">
-      <input type="text" id="idbusqueda" placeholder="Encuentra todo los que necesitas">
-      <button class="btn-main btn-search"><i class="fa fa-search" aria-hidden="true"></i></button>
-    </div>
-    <div class="option-place"></div>
-    <div class="item-option" title="Registrate"><a href="register.php"> <i class="fa fa-user-circle-o"
-          aria-hidden="true"></i></a></div>
-    <div class="item-option" title="Iniciar Sesion"><a href="loginC.php"><i class="fa fa-sign-in"
-          aria-hidden="true"></i></a></div>
-    <div class="item-option" title="Mis Compras"><a href="#"> <i class="fa fa-shopping-cart" aria-hidden="true"></i></a>
-    </div>
-
-
-  </header>
-  <div class="main-content">
-    <div class="content-page">
-      <div class="title-section"></div>
-      <a href="">
-        <div class="row">
+    <div class="navbar navbar-expand-lg navbar-dark bg-dark">
+      <div class="container">
+        <a href="index.php" class="navbar-brand">
+          <strong>Digital Retro</strong>
+        </a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarHeader"
+          aria-controls="navbarHeader" aria-expanded="false" aria-label="Toggle navigation">
+          <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarHeader">
+          <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+            <li class="nav-item">
+              <a href="index.php" class="nav-link active">Catalogo</a>
+            </li>
+            <li class="nav-item">
+              <a href="#" class="nav-link">Contacto</a>
+            </li>
+          </ul>
+          <a href="carrito.php" class="btn btn-primary">Carrito</a>
         </div>
-      </a>
+      </div>
     </div>
-  </div>
+  </header>
+  <main>
+    <div class="container">
+      <div class="row">
+        <div class="col-md-6 order-md-1">
+          <img src="data:image/jpg;base64,<?php echo base64_encode($row['imagen']) ?>">
+        </div>
+        <div class="col-md-6 order-md-2">
+          <h2><?php echo $nombre;?></h2>
+          <h2><?php echo MONEDA.number_format($precio, 0, ',','.');;?></h2>
+          <p class="lead">
+            <?php echo $descripcion;?>
+          </p>
+          <p class="detail-pla">
+          <?php echo $plataforma;?>
+          </p>
+          <p class="detail-cla">
+          <?php echo $clasificacion;?>
+          </p>
+          <div class="d-grid gap-3 col-10 mx-auto">
+            <button class="btn btn-primary" type="button">Comprar Ahora</button>
+            <button class="btn btn-outline-primary" type="button">Agregar al carrito</button>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </main>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"
+    integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p"
+    crossorigin="anonymous"></script>
 </body>
 
 </html>
