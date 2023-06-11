@@ -8,8 +8,8 @@ $sql = $con->prepare("SELECT id, nombre_videojuego, precio, imagen FROM producto
 $sql->execute();
 $resultado = $sql->fetchAll(PDO::FETCH_ASSOC);
 
-//session_destroy();
-print_r($_SESSION);
+// session_destroy();
+// print_r($_SESSION);
 ?>
 
 <?php
@@ -64,7 +64,9 @@ if (isset($_POST['enviar'])) {
               </form>
             </div>
           </ul>
-           <a href="carrito.php" class="btn btn-primary">Carrito <span id="num_cart" class="badge bg-secondary"><?php echo $num_cart;?></span>
+          <a href="checkout.php" class="btn btn-primary">Carrito <span id="num_cart" class="badge bg-secondary">
+              <?php echo $num_cart; ?>
+            </span>
           </a>
         </div>
       </div>
@@ -98,7 +100,7 @@ if (isset($_POST['enviar'])) {
                          hash_hmac('sha1', $row['id'], KEY_TOKEN); ?>" class="btn btn-primary">Detalles</a>
                   </div>
                   <button class="btn btn-outline-success" type="button" onclick="addProducto(<?php echo $row['id']; ?>, 
-                  '<?php echo hash_hmac('sha1', $row['id'], KEY_TOKEN ); ?>')">Agregar</button>
+                  '<?php echo hash_hmac('sha1', $row['id'], KEY_TOKEN); ?>')">Agregar</button>
                 </div>
               </div>
             </div>
@@ -111,11 +113,11 @@ if (isset($_POST['enviar'])) {
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"
     integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p"
     crossorigin="anonymous"></script>
-    
+
     <script>
       function addProducto(id, token){
-        let url = 'clases/carrito.php'
-        let formData = new formData()
+        var url = 'clases/carrito.php'
+        var formData = new FormData();
         formData.append('id', id)
         formData.append('token', token)
 
@@ -127,7 +129,7 @@ if (isset($_POST['enviar'])) {
         .then(data =>{
           if(data.ok){
             let elemento =document.getElementById("num_cart")
-            elemento.innerHTML =data.numero
+            elemento.innerHTML = data.numero
           }
         })
       }

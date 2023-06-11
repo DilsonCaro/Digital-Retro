@@ -70,7 +70,7 @@ if ($id == '' || $token == '') {
               <a href="#" class="nav-link">Contacto</a>
             </li>
           </ul>
-          <a href="carrito.php" class="btn btn-primary">Carrito <span id="num_cart" class="badge bg-secondary"><?php echo $num_cart;?></span>
+          <a href="checkout.php" class="btn btn-primary">Carrito <span id="num_cart" class="badge bg-secondary"><?php echo $num_cart;?></span>
           </a>
         </div>
       </div>
@@ -109,8 +109,8 @@ if ($id == '' || $token == '') {
 
     <script>
       function addProducto(id, token){
-        let url = 'clases/carrito.php'
-        let formData = new formData()
+        var url = 'clases/carrito.php'
+        var formData = new FormData();
         formData.append('id', id)
         formData.append('token', token)
 
@@ -122,7 +122,7 @@ if ($id == '' || $token == '') {
         .then(data =>{
           if(data.ok){
             let elemento =document.getElementById("num_cart")
-            elemento.innerHTML =data.numero
+            elemento.innerHTML = data.numero
           }
         })
       }
