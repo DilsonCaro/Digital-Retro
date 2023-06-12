@@ -3,7 +3,7 @@
   <head>
     <meta name="viewport" content="width=device-width, initial-scale=1"> <!-- Ensures optimal rendering on mobile devices. -->
   </head>
-    <script src="https://www.paypal.com/sdk/js?client-id=AdZV8c-ul9_9BWN3K2L2s2XeqYMGp7X6wVABZ9FwL_AehR3yr5pL0KKFPV0nseh9k8mc0YwUX0kW1oVm"> // Replace YOUR_CLIENT_ID with your sandbox client ID
+    <script src="https://www.paypal.com/sdk/js?client-id=AdZV8c-ul9_9BWN3K2L2s2XeqYMGp7X6wVABZ9FwL_AehR3yr5pL0KKFPV0nseh9k8mc0YwUX0kW1oVm&currency=USD"> // Replace YOUR_CLIENT_ID with your sandbox client ID
     </script>
 
   <body>

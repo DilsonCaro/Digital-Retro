@@ -8,7 +8,7 @@ $sql = $con->prepare("SELECT id, nombre_videojuego, precio, imagen FROM producto
 $sql->execute();
 $resultado = $sql->fetchAll(PDO::FETCH_ASSOC);
 
-//session_destroy();
+// session_destroy();
 // print_r($_SESSION);
 ?>
 

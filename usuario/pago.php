@@ -91,6 +91,7 @@ if ($productos != null) {
                             <tr>
                                 <th>Producto</th>
                                 <th>Subtotal</th>
+                                <th></th>
                             </tr>
                         </thead>
                         <tbody>
@@ -105,6 +106,8 @@ if ($productos != null) {
                                     $cantidad = $producto['cantidad'];
                                     $subtotal = $cantidad * $precio;
                                     $total += $subtotal;
+                                    $dolares= 788.30;
+                                    $dolaresU= round($total/$dolares, 0);
                                     ?>
                                     <tr>
                                         <td>
@@ -134,7 +137,7 @@ if ($productos != null) {
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"
         integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p"
         crossorigin="anonymous"></script>
-    <script src="https://www.paypal.com/sdk/js?client-id=<?php echo CLIENT_ID; ?>"> // Replace YOUR_CLIENT_ID with your sandbox client ID
+    <script src="https://www.paypal.com/sdk/js?client-id=<?php echo CLIENT_ID; ?>&currency=<?php echo CURRENCY; ?>"> // Replace YOUR_CLIENT_ID with your sandbox client ID
     </script>
     <script>
         paypal.Buttons({
@@ -147,15 +150,15 @@ if ($productos != null) {
                 return actions.order.create({
                     purchase_units: [{
                         amount:{
-                            value:100
+                            value: <?php echo $dolaresU; ?>
                         }
                     }]
                 });
             },
             onApprove: function(data, actions){
                 actions.order.capture().then(function (detalles) {
-                    console.log(detalles);
-                    
+                    let URL = 'clases/captura.php'
+                    console.log(detalles); 
                 });
             },
             onCancel: function(data){
