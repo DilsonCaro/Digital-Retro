@@ -18,15 +18,25 @@ if (isset($_REQUEST['guardarP'])) {
 
     if (!empty($_FILES['imagenE']['tmp_name'])) {
         $imagen = addslashes(file_get_contents($_FILES['imagenE']['tmp_name']));
+
         $query = "UPDATE productos SET
-            nombre_videojuego='  $nombre_videojuego  ', precio='  $precio  ', plataforma= '$plataforma', key_videojuego='  $key_videojuego  ', stock='  $stock  ', descripcion='  $descripcion  ', categoria='  $categoria  ',
-            fecha_lanzamiento='  $fecha_lanzamiento  ', clasificacion='  $clasificacion  ',estado=' $estado ', imagen=' $imagen '
-            where id='  $id ' ;
+            nombre_videojuego = '$nombre_videojuego',
+            precio = '$precio',
+            plataforma = '$plataforma',
+            key_videojuego = '$key_videojuego',
+            stock = '$stock',
+            descripcion = '$descripcion',
+            categoria = '$categoria',
+            fecha_lanzamiento = '$fecha_lanzamiento',
+            clasificacion = '$clasificacion',
+            estado = '$estado',
+            imagen = '$imagen'
+            WHERE id = '$id';
         ";
     } else {
         $query = "UPDATE productos SET
         nombre_videojuego='  $nombre_videojuego  ', precio='  $precio  ', plataforma= '$plataforma', key_videojuego='  $key_videojuego  ', stock='  $stock  ', descripcion='  $descripcion  ', categoria='  $categoria  ',
-        fecha_lanzamiento='  $fecha_lanzamiento  ', clasificacion='  $clasificacion  ',estado=' $estado '
+        fecha_lanzamiento='  $fecha_lanzamiento  ', clasificacion='  $clasificacion  ', estado='  $estado  '
         where id='  $id ' ;
     ";
     }
@@ -43,7 +53,7 @@ if (isset($_REQUEST['guardarP'])) {
     }
 }
 $id = mysqli_real_escape_string($con, $_REQUEST['id'] ?? '');
-$query = "SELECT id, nombre_videojuego, precio, plataforma, key_videojuego, stock, descripcion, categoria, fecha_lanzamiento, clasificacion, imagen from productos where id='" . $id . "'; ";
+$query = "SELECT id, nombre_videojuego, precio, plataforma, key_videojuego, stock, descripcion, categoria, fecha_lanzamiento, clasificacion, estado, imagen from productos where id='" . $id . "'; ";
 mysqli_query($con, $query);
 $res = mysqli_query($con, $query);
 $row = mysqli_fetch_assoc($res);
@@ -66,7 +76,7 @@ $row = mysqli_fetch_assoc($res);
     <h1 class="text-center"> Editar Productos</h1>
     <br>
     <div class="container">
-        <form method="POST">
+        <form method="POST" enctype='multipart/form-data'>
             <div class="form-group mb-3">
                 <label class="form-label">Nombre Videojuego</label>
                 <input type="text" class="form-control" name="nombreV" value="<?php echo $row['nombre_videojuego'] ?>" required="required">
@@ -77,14 +87,14 @@ $row = mysqli_fetch_assoc($res);
             </div>
             <div>
                 <label class="form-group mb-3">Plataforma</label>
+                <!-- <input type="text" class="combobox" name="plataforma" value="" required="required"> -->
                 <div>
                     <select name="plataforma" required="required">
                         <option value="No especifico">Seleccionar</option>
                         <option value="PS5">PS5</option>
                         <option value="PS4">PS4</option>
                         <option value="Steam">Steam</option>
-                        <option value="XBOX S">XBOX S</option>
-                        <option value="XBOX X">XBOX X</option>
+                        <option value="XBOX X/S">XBOX X/S</option>
                         <option value="Epic Games">Epic Games</option>
                         <option value="EA Play">EA Play</option>
                     </select>
@@ -117,7 +127,7 @@ $row = mysqli_fetch_assoc($res);
             </div>
             <div class="form-group mb-3">
                 <label class="form-label">Estado</label>
-                <input type="text" class="form-control" name="estado" value="<?php echo $row['estado'] ?>" required="required">
+                <input type="number" class="form-control" name="estado" value="<?php echo $row['estado'] ?>" required="required">
             </div>
             <div class="form-group mb-3">
                 <label class="form-label">Imagen</label>
