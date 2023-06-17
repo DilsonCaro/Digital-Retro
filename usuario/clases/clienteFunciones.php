@@ -50,9 +50,9 @@ function registraUsuario(array $datos, $con)
     $sql = $con->prepare("INSERT INTO cuentas (usuario, password, token, id_cliente) VALUES (?,?,?,?)");
 
     if ($sql->execute($datos)) {
-        return true;
+        return $con->lastInsertId();
     }
-    return false;
+    return 0;
 }
 
 function usuarioExiste($usuario, $con)
@@ -95,6 +95,34 @@ function mostrarMensajes(array $errors){
     }
 
 }
+
+function validaToken($id, $token ,$con)
+{
+    $msg = "";
+    $sql = $con->prepare("SELECT id FROM cuentas WHERE id = ? AND token LIKE ? LIMIT 1");
+
+    $sql->execute([$id, $token]);
+    if($sql->fetchColumn() > 0){
+        if(activarUsuario($id, $con)){
+            $msg = "cuenta activada.";
+        }else{
+            $msg = "Error al activar la cuenta.";
+        }
+    }else {
+        $msg = "No existe el registro del cliente.";
+    }
+    return $msg;
+
+}
+
+function activarUsuario($id, $con){
+
+    $sql = $con->prepare("UPDATE cuentas SET activacion = 1  WHERE id = ? ");
+    return $sql->execute([$id]);
+
+
+}
+
 
 
 ?>
