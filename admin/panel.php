@@ -14,6 +14,7 @@ $modulo = $_REQUEST['modulo'] ?? '';
 ?>
 
 <head>
+  <link rel="icon" href="images/logo.jpg">
   <script src="plugins/jquery/jquery.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.0/jquery.min.js" integrity="sha512-3gJwYpMe3QewGELv8k/BX9vcqhryRdzRMxVfq6ngyWXwo03GFEzjsUm8Q7RZcHPHksttq7/GFoxjCVUjkjvPdw==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
   <script src="plugins/jquery-ui/jquery-ui.min.js"></script>
@@ -151,12 +152,6 @@ $modulo = $_REQUEST['modulo'] ?? '';
               </a>
               <ul class="nav nav-treeview">
                 <li class="nav-item">
-                  <a href="panel.php?modulo=estadisticas" class="nav-link <?php echo ($modulo == "estadisticas" || $modulo == "") ? "active " : " "; ?>">
-                    <i class="fas fa-chart-bar nav-icon"></i>
-                    <p>Estadisticas</p>
-                  </a>
-                </li>
-                <li class="nav-item">
                   <a href="panel.php?modulo=usuarios" class="nav-link <?php echo ($modulo == "usuarios" || $modulo == "crearUsuario" || $modulo == "editarUsuario") ? "active " : " "; ?>">
                     <i class="far fa-user nav-icon"></i>
                     <p>Usuarios</p>
@@ -166,12 +161,6 @@ $modulo = $_REQUEST['modulo'] ?? '';
                   <a href="panel.php?modulo=productos" class="nav-link <?php echo ($modulo == "productos" || $modulo == "agregarProductos") ? "active " : " "; ?>">
                     <i class="fa fa-shopping-bag nav-icon" aria-hiddent="true"></i>
                     <p>Productos</p>
-                  </a>
-                </li>
-                <li class="nav-item">
-                  <a href="panel.php?modulo=ventas" class="nav-link <?php echo ($modulo == "ventas") ? "active " : " "; ?>">
-                    <i class="fa fa-table nav-icon" aria-hiddent="true"></i>
-                    <p>Ventas</p>
                   </a>
                 </li>
               </ul>
@@ -193,38 +182,33 @@ $modulo = $_REQUEST['modulo'] ?? '';
     <?php
     }
     if (isset($_REQUEST['mensaje1'])) {
-      ?>
-        <div class="alert alert-warning alert-dismissible fade show float-right" role="alert">
-          <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-            <span aria-hidden="true">&times;</span>
-            <span class="sr-only">Close</span>
-          </button>
-          <?php echo $_REQUEST['mensaje1'] ?>
-        </div>
-      <?php
-      }
-      if (isset($_REQUEST['mensaje2'])) {
-        ?>
-          <div class="alert alert-danger alert-dismissible fade show float-right" role="alert">
-            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-              <span aria-hidden="true">&times;</span>
-              <span class="sr-only">Close</span>
-            </button>
-            <?php echo $_REQUEST['mensaje2'] ?>
-          </div>
-        <?php
-        }
-    if ($modulo == "estadisticas" || $modulo == "") {
-      include_once "estadisticas.php";
+    ?>
+      <div class="alert alert-warning alert-dismissible fade show float-right" role="alert">
+        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+          <span class="sr-only">Close</span>
+        </button>
+        <?php echo $_REQUEST['mensaje1'] ?>
+      </div>
+    <?php
     }
+    if (isset($_REQUEST['mensaje2'])) {
+    ?>
+      <div class="alert alert-danger alert-dismissible fade show float-right" role="alert">
+        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+          <span class="sr-only">Close</span>
+        </button>
+        <?php echo $_REQUEST['mensaje2'] ?>
+      </div>
+    <?php
+    }
+
     if ($modulo == "usuarios") {
       include_once "usuarios.php";
     }
     if ($modulo == "productos") {
       include_once "productos.php";
-    }
-    if ($modulo == "ventas") {
-      include_once "ventas.php";
     }
     if ($modulo == "crearUsuario") {
       include_once "crearUsuario.php";
